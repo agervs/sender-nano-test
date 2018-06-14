@@ -16,8 +16,8 @@ SoftwareSerial softSerial(2, 3); //RX, TX
 #include "SparkFun_UHF_RFID_Reader.h" //Library for controlling the M6E Nano module
 RFID nano; //Create instance
 
-String iconStatus = "";
-int loopCount = 0;
+char iconStatus = 'o';
+//int loopCount = 0;
 //int lunchDetected = 0;
 //int bookDetected = 0;
 //int waterDetected = 0;
@@ -43,12 +43,12 @@ void setup() {
     while (1); //Freeze!
   }
   nano.setRegion(REGION_NORTHAMERICA); //Set to North America
-  nano.setReadPower(2000);
+  nano.setReadPower(2300);
   nano.startReading();
 }
 
 void loop() {
- loopCount = loopCount + 1;
+// loopCount = loopCount + 1;
  lunchDetectedThroughThisLoop = 0;
  bookDetectedThroughThisLoop = 0;
  waterDetectedThroughThisLoop = 0;
@@ -78,15 +78,15 @@ void loop() {
     
       if (content.substring(12) == " 72 21 dd b1 63 2c a7 76") {
 //        lunchDetectedThroughThisLoop = 1; // indicate the lunch was detected in this loop
-        iconStatus = "l";
+        iconStatus = 'l';
       } else if (content.substring(12) == " 73 0d db 71 63 2c a7 6d") {
 //         bookDetectedThroughThisLoop = 1;
-         iconStatus = "b"; 
+         iconStatus = 'b'; 
       } else if (content.substring(12) == " 73 0d db b1 63 2c a7 6e") {
 //         waterDetectedThroughThisLoop = 1;
-         iconStatus = "w"; 
+         iconStatus = 'w'; 
       } else {
-        iconStatus = "o"; 
+        iconStatus = 'o'; 
       }
     
     } else if (responseType == ERROR_CORRUPT_RESPONSE) {
@@ -96,7 +96,7 @@ void loop() {
       Serial.print("Unknown error");
     }
   } else {
-    iconStatus = "o"; 
+    iconStatus = 'o'; 
   }
 
   
@@ -201,6 +201,6 @@ boolean setupNano(long baudRate) {
 // function that executes whenever data is requested by master
 // this function is registered as an event, see setup()
 void requestEvent() {
-  Wire.write(iconStatus.c_str()); // respond with message of 6 bytes
+  Wire.write(iconStatus); // respond with message of 6 bytes
   // as expected by master
 }
