@@ -34,6 +34,7 @@ int waterDetectedThroughThisLoop;
 void setup() {
   Serial.begin(115200);
   Wire.begin(8);                // join i2c bus with address #8
+  Wire.setClock(400000);  
   Wire.onRequest(requestEvent); // register event
 
   while (!Serial); //Wait for the serial port to come online
